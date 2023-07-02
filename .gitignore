@@ -1,0 +1,27 @@
+# Python
+*.pyc
+*.pyo
+__pycache__/
+
+# Distribution / Packaging
+dist/
+build/
+*.egg-info/
+
+# IDE / Editor
+.idea/
+.vscode/
+
+# Compiled files
+*.pyc
+*.pyo
+
+# Log files
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Virtual environment
+venv/

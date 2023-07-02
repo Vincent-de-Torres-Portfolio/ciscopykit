@@ -1,0 +1,4 @@
+include README.md
+recursive-include ciscopykit *.py
+recursive-include ciscopykit/templates *.txt
+
