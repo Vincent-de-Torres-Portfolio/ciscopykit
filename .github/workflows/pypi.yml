@@ -1,4 +1,4 @@
-name: PyPI Update
+name: ciscopykit update package
 
 on:
   push:
@@ -6,23 +6,28 @@ on:
       - main
 
 jobs:
-  update_pypi:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out code
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.x
+          python-version: 3.11.4
 
       - name: Install dependencies
-        run: pip install --upgrade setuptools wheel twine
+        run: pip install --upgrade pip setuptools
 
-      - name: Build and publish to PyPI
-        run: |
-          python setup.py sdist bdist_wheel
-          twine upload dist/*
+      - name: Build package
+        run: python setup.py sdist bdist_wheel
 
+      - name: Install twine
+        run: pip install twine
+
+      - name: Publish package to PyPI
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: twine upload dist/*
