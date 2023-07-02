@@ -6,7 +6,7 @@ setup(
     author='devinci-it',
     author_email='vince.dev@icloud.com',
     description='A network management toolkit for Cisco devices keeping track of devices when using GNS3 / Cisco Packet Tracer',
-    long_description='''A network management toolkit for Cisco devices. It  provides classes and methods to manage network devices, interfaces, and configurations.''',
+    long_description='''A network management toolkit for Cisco devices. It provides classes and methods to manage network devices, interfaces, and configurations.''',
     url='https://github.com/devinci-it/ciscopykit',
     packages=find_packages(),
     classifiers=[
@@ -17,6 +17,11 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.11.4',
+
+
+
     ],
     install_requires=[
         'click',
@@ -30,4 +35,3 @@ setup(
         ],
     },
 )
-
