@@ -1,5 +1,6 @@
 # __`CiscoPyKit`__
 
+![logo](ciscopykit/templates/logo.svg)
 CiscoPyKit is a network management toolkit for Cisco devices. It provides classes and methods to manage network devices, interfaces, and configurations.
 
 ## Features
