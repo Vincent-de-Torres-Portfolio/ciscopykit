@@ -158,6 +158,76 @@ name.
             list: The list of active interfaces.
         """
         return self.active_interfaces
+        @staticmethod
+    def generate_init_config(hostname, site, interface_range="GigabitEthernet0/0-10", static_pass="cisco", motd="Welcome to the Cisco network!"):
+        """
+        Generates the initial configuration for the device.
+
+        Args:
+            hostname (str): The hostname to be set in the configuration.
+            site (str): The site name to be used in the configuration.
+            interface_range (str, optional): The range of interfaces. Defaults to "GigabitEthernet0/0-10".
+            static_pass (str, optional): The static password for the device. Defaults to "cisco".
+            motd (str, optional): The Message of the Day (MOTD) for the device. Defaults to "Welcome to the Cisco network!".
+
+        Returns:
+            str: The generated initial configuration.
+        """
+        # Generate configuration
+        config = f'''
+!{'='*40}!
+! {hostname}{' ' * (39-len(hostname))}!      
+!{'='*40}!  
+ 
+enable
+configure terminal
+no ip domain-lookup
+hostname {hostname}
+username admin secret {static_pass}
+    
+line console 0
+logging synchronous
+exit
+conf t
+ip domain-name {site}.ccna.com
+crypto key generate rsa
+1024
+    
+banner motd ${motd}$
+enable secret {static_pass}
+line console 0
+password {static_pass}
+login
+exit
+    
+line vty 0 4
+login local
+transport input ssh
+ip ssh version 2
+    
+service password-encryption
+'''
+        return config
+
+    @staticmethod
+    def generate_interface_config(interface_name, ip_address, subnet_mask):
+        """
+        Generates the interface configuration for a specific interface.
+
+        Args:
+            interface_name (str): The name of the interface.
+            ip_address (str): The IP address of the interface.
+            subnet_mask (str): The subnet mask of the interface.
+
+        Returns:
+            str: The generated interface configuration.
+        """
+        return f"""
+interface {interface_name}
+no switchport
+ip address {ip_address} {subnet_mask}
+no shutdown
+"""
 
 
 class Router(Device):
@@ -167,6 +237,7 @@ class Router(Device):
 
     def __init__(self, hostname, site, layer):
         super().__init__("Router", hostname, site, layer)
+    
 
 
 class L3Switch(Device):
