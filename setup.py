@@ -2,12 +2,12 @@ from setuptools import setup, find_packages
 
 setup(
     name='ciscopykit',
-    version='1.1',
+    version='1.2',
     author='devinci-it',
     author_email='vince.dev@icloud.com',
     description='A network management toolkit for Cisco devices keeping track of devices when using GNS3 / Cisco Packet Tracer',
     long_description='''A network management toolkit for Cisco devices. It provides classes and methods to manage network devices, interfaces, and configurations.''',
-    url='https://github.com/devinci-it/ciscopykit',
+    url='https://github.com/Vincent-de-Torres-Portfolio/ciscopykit',
     packages=find_packages(),
     classifiers=[
         'Development Status :: 3 - Alpha',
