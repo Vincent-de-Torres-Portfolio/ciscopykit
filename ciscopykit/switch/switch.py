@@ -1,67 +1,5 @@
 import ipaddress
 
-
-
-# def generate_init_config(self, hostname, site, interface_range="GigabitEthernet0/0/0-24", static_pass="cisco",
-#                          motd="Welcome to the Cisco network!"):
-#     config = f'''
-#    !{'=' * 40}!
-#    ! {hostname}{' ' * (39 - len(hostname))}!
-#    !{'=' * 40}!
-#
-#    enable
-#    configure terminal
-#    no ip domain-lookup
-#    hostname {hostname}
-#    username admin secret {static_pass}
-#
-#    line console 0
-#    logging synchronous
-#    exit
-#    conf t
-#    ip domain-name {site}.ccna.com
-#    crypto key generate rsa
-#    1024
-#
-#    banner motd ${motd}$
-#    enable secret {static_pass}
-#    line console 0
-#    password {static_pass}
-#    login
-#    exit
-#
-#    line vty 0 4
-#    login local
-#    transport input ssh
-#    ip ssh version 2
-#
-#    service password-encryption
-#    '''
-#
-#     # Shut down all ports
-#     for port in self.ports:
-#         config += f"interface {port}\n"
-#         config += "\t\tdown\n"
-#         config += "\t\texit\n"
-#
-#     # Configure VLAN interfaces
-#     for port in self.ports:
-#         if port.startswith("VLAN") and port in self.active_ports:
-#             config += f"interface {port}\n"
-#             config += "\t\tno shutdown\n"
-#             config += "\t\texit\n"
-#
-#     # Configure physical interfaces
-#     for port in self.active_ports:
-#         if port.startswith("GigabitEthernet") and port in self.ports:
-#             config += f"interface {port}\n"
-#             config += "\t\tno shutdown\n"
-#             config += "\t\texit\n"
-#
-#     return config
-
-import ipaddress
-
 class Switch:
     def __init__(self, model, host_name, ports, active_ports=None):
         self.model = model
@@ -204,19 +142,7 @@ class Switch:
         config += "\t\texit\n"
         return config
 
-    # def generate_physical_interface_config(self, interface, ip_dict):
-    #     config = f'''
-    #     interface {interface}
-    #     '''
-    #
-    #     ip_address = ip_dict.get(interface)
-    #     if ip_address:
-    #         interface = self.convert_str_to_ipv4_interface(ip_address)
-    #         config += f"ip address {interface.ip} {interface.netmask}\n"
-    #
-    #     config += "\t\tno shutdown\n"
-    #     config += "\t\texit\n"
-    #     return config
+
 
     def configure_vtp(self, vtp_domain, vtp_mode=None):
         if vtp_mode:

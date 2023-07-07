@@ -49,6 +49,7 @@ class L3Switch(Switch):
     def generate_interface_config(self,interface, ip , netmask):
         config = f"""
         interface {interface}
+        no switchport
         ip address {ip} {netmask}
         no shutdown
         exit
@@ -56,7 +57,7 @@ class L3Switch(Switch):
         return config
 
 
-    def generate_config(self, ip_dict):
+    def generate_config(self, ip_dict,vtp_domain):
         config = self.generate_init_config(hostname=self.host_name, site=self.get_model()[:2])
 
         for interface, ip_address in ip_dict.items():
@@ -65,11 +66,13 @@ class L3Switch(Switch):
                 config += self.generate_vlan_interface_config(interface, ip_inf.ip ,ip_inf.netmask)
             else:
                 config+= self.generate_interface_config(interface, ip_inf.ip ,ip_inf.netmask)
+        config+= self.generate_vtp_config(vtp_domain)
         return config
 
-    # def check_vlan_interface(self, vlan):
-    #     for port in self.active_ports:
-    #         if port.startswith("VLAN") and port == vlan:
-    #             return True
-    #     return False
-
+    def generate_vtp_config(self, vtp_domain, vtp_mode='server'):
+        config = f"""
+        vtp domain {vtp_domain}
+        vtp mode {vtp_mode}
+        exit
+        """
+        return config

@@ -15,6 +15,9 @@ def main():
     parser.add_argument("--hostname", required=True, help="Switch hostname")
     parser.add_argument("--subnet", required=True, help="Subnet for IP address generation")
     parser.add_argument("--save-config", help="File path to save the configuration")
+    parser.add_argument("--vtp-domain", help="Assign VTP Domain.")
+
+
 
     # Parse the command-line arguments
     args = parser.parse_args()
@@ -28,6 +31,7 @@ def main():
     hostname = args.hostname
     subnet = args.subnet
     save_config = args.save_config
+    vtp_domain=args.vtp_domain
 
     # Create an instance of the L3Switch class
     l3_switch = L3Switch(model, ports, active_ports, routing_protocol, subnet=subnet)
@@ -37,7 +41,7 @@ def main():
     l3_switch.subnet = subnet
 
     # Generate the configuration
-    config = l3_switch.generate_config(ip_dict)
+    config = l3_switch.generate_config(ip_dict,vtp_domain)
 
     # Clean the configuration by stripping whitespaces
     config = config.strip()
@@ -59,3 +63,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# python app.py --model "Cisco 3750" --ports "GigabitEthernet1/0/1,GigabitEthernet1/0/2,VLAN10,VLAN20" --
+# active-ports "GigabitEthernet1/0/1,GigabitEthernet1/0/2" --routing-protocol "OSPF" --ip-dict "{'VLAN10': '10.0.0.1/24', 'VLAN20': '20.0.0.1/24', 'Gi0/0':'10.10.11.1/30'}" --hostname "LA_SW1" --subnet "10.0.0.0/16" --save-config ./config.txt
