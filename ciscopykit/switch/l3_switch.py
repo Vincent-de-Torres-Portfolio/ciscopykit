@@ -2,9 +2,12 @@ from switch import Switch
 
 
 class L3Switch(Switch):
-    def __init__(self, model, ports, routing_protocol):
-        super().__init__(model, ports)
+    def __init__(self, model, ports, active_ports, routing_protocol):
+        super().__init__(model, ports, active_ports)
         self.routing_protocol = routing_protocol
+
+    # Rest of the class implementation...
+
 
     def get_routing_protocol(self):
         return self.routing_protocol

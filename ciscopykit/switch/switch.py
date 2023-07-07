@@ -35,8 +35,7 @@ class Switch:
     def set_power_consumption(self, power_consumption):
         self.power_consumption = power_consumption
 
-    @staticmethod
-    def generate_init_config(hostname, site, interface_range="GigabitEthernet0/0/0-24", static_pass="cisco",
+    def generate_init_config(self, hostname, site, interface_range="GigabitEthernet0/0/0-24", static_pass="cisco",
                              motd="Welcome to the Cisco network!"):
         config = f'''
        !{'=' * 40}!
@@ -70,12 +69,26 @@ class Switch:
        ip ssh version 2
 
        service password-encryption
-                   '''
+       '''
 
-        for port in Switch.ports:
-            if port not in Switch.active_ports:
+        # Shut down all ports
+        for port in self.ports:
+            config += f"interface {port}\n"
+            config += "\t\tdown\n"
+            config += "\t\texit\n"
+
+        # Configure VLAN interfaces
+        for port in self.ports:
+            if port.startswith("VLAN") and port in self.active_ports:
                 config += f"interface {port}\n"
-                config += "\t\tdown\n"
+                config += "\t\tno shutdown\n"
+                config += "\t\texit\n"
+
+        # Configure physical interfaces
+        for port in self.active_ports:
+            if port.startswith("GigabitEthernet") and port in self.ports:
+                config += f"interface {port}\n"
+                config += "\t\tno shutdown\n"
                 config += "\t\texit\n"
 
         return config
