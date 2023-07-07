@@ -31,3 +31,4 @@ def main():
 if __name__ == "__main__":
     main()
 
+#  python app.py --model "Cisco 3750" --ports "GigabitEthernet1/0/1,GigabitEthernet1/0/2,VLAN10,VLAN20" --active-ports "GigabitEthernet1/0/1,GigabitEthernet1/0/2" --routing-protocol "OSPF" --ip-dict "{'VLAN10': '10.0.0.1/24', 'VLAN20': '20.0.0.1/24', 'Gi0/0':'10.10.11.1/30'}" --hostname "LA_SW1" --subnet "10.0.0.0/16"

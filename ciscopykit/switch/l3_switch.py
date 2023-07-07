@@ -1,12 +1,12 @@
+import ipaddress
 from switch import Switch
 
 
 class L3Switch(Switch):
-    def __init__(self, model, ports, active_ports, routing_protocol):
+    def __init__(self, model, ports, active_ports, routing_protocol, subnet):
         super().__init__(model, ports, active_ports)
         self.routing_protocol = routing_protocol
-
-    # Rest of the class implementation...
+        self.subnet = subnet
 
 
     def get_routing_protocol(self):
@@ -24,39 +24,52 @@ class L3Switch(Switch):
             return ""
 
     def configure_ospf(self):
-        return '''
+        return """
         router ospf 1
         network 0.0.0.0 255.255.255.255 area 0
         exit
-        '''
+        """
 
     def configure_eigrp(self):
-        return '''
+        return """
         router eigrp 100
         network 0.0.0.0
         exit
-        '''
+        """
 
-    def generate_vlan_interface_config(self, vlan, ip_address):
-        config = f'''
-        interface vlan {vlan}
-        ip address {ip_address}
+    def generate_vlan_interface_config(self, vlan, ip,netmask):
+        config = f"""
+        interface vlan {(vlan.split('VLAN'))[1]}
+        ip address {ip} {netmask}
         no shutdown
         exit
-        '''
+        """
         return config
+
+    def generate_interface_config(self,interface, ip , netmask):
+        config = f"""
+        interface {interface}
+        ip address {ip} {netmask}
+        no shutdown
+        exit
+        """
+        return config
+
 
     def generate_config(self, ip_dict):
-        config = super().generate_config(ip_dict)
+        config = self.generate_init_config(hostname=self.host_name, site=self.get_model()[:2])
 
-        for vlan, ip_address in ip_dict.items():
-            if vlan.startswith("VLAN") and self.check_vlan_interface(vlan):
-                config += self.generate_vlan_interface_config(vlan, ip_address)
-
+        for interface, ip_address in ip_dict.items():
+            ip_inf = ipaddress.IPv4Interface(ip_address)
+            if interface.startswith("VLAN"):
+                config += self.generate_vlan_interface_config(interface, ip_inf.ip ,ip_inf.netmask)
+            else:
+                config+= self.generate_interface_config(interface, ip_inf.ip ,ip_inf.netmask)
         return config
 
-    def check_vlan_interface(self, vlan):
-        for port in self.active_ports:
-            if port.startswith("VLAN") and port == vlan:
-                return True
-        return False
+    # def check_vlan_interface(self, vlan):
+    #     for port in self.active_ports:
+    #         if port.startswith("VLAN") and port == vlan:
+    #             return True
+    #     return False
+

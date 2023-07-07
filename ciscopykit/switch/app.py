@@ -1,63 +1,60 @@
 import argparse
-from switch import Switch
+from l3_switch import L3Switch
+
 
 def main():
-    parser = argparse.ArgumentParser(description="L3 Switch Configuration Demo")
-    parser.add_argument("--model", type=str, help="Switch model")
-    parser.add_argument("--ports", type=str, help="Comma-separated list of switch ports")
-    parser.add_argument("--active_ports", type=str, help="Comma-separated list of active switch ports")
-    parser.add_argument("--routing_protocol", type=str, help="Routing protocol (OSPF or EIGRP)")
-    parser.add_argument("--vlan_dict", type=str, help="Dictionary of VLAN names (optional)")
-    parser.add_argument("--ip_dict", type=str, help="Dictionary of IP addresses for interfaces")
-    parser.add_argument("--vtp_domain", type=str, help="VTP domain name")
-    parser.add_argument("--vtp_mode", type=str, help="VTP mode (optional)")
+    # Create the argument parser
+    parser = argparse.ArgumentParser(description="L3 Switch Configuration")
 
+    # Add arguments
+    parser.add_argument("--model", required=True, help="Switch model")
+    parser.add_argument("--ports", required=True, help="List of switch ports")
+    parser.add_argument("--active-ports", required=True, help="List of active switch ports")
+    parser.add_argument("--routing-protocol", required=True, help="Routing protocol")
+    parser.add_argument("--ip-dict", help="Dictionary of VLAN IP addresses")
+    parser.add_argument("--hostname", required=True, help="Switch hostname")
+    parser.add_argument("--subnet", required=True, help="Subnet for IP address generation")
+    parser.add_argument("--save-config", help="File path to save the configuration")
+
+    # Parse the command-line arguments
     args = parser.parse_args()
 
+    # Extract the values from the arguments
     model = args.model
     ports = args.ports.split(",")
     active_ports = args.active_ports.split(",")
     routing_protocol = args.routing_protocol
-    vlan_dict = eval(args.vlan_dict) if args.vlan_dict else None
     ip_dict = eval(args.ip_dict) if args.ip_dict else {}
-    vtp_domain = args.vtp_domain
-    vtp_mode = args.vtp_mode
+    hostname = args.hostname
+    subnet = args.subnet
+    save_config = args.save_config
 
-    l3_switch = Switch(model, "MySwitch", ports)
+    # Create an instance of the L3Switch class
+    l3_switch = L3Switch(model, ports, active_ports, routing_protocol, subnet=subnet)
 
-    l3_switch.set_active_ports(active_ports)
+    # Set the hostname and subnet
+    l3_switch.host_name = hostname
+    l3_switch.subnet = subnet
 
-    config = l3_switch.generate_init_config(hostname=l3_switch.host_name, site=l3_switch.host_name[:2])
+    # Generate the configuration
+    config = l3_switch.generate_config(ip_dict)
 
-    # Configure VLAN interfaces
-    for port in active_ports:
-        if port.startswith("VLAN") and port in ip_dict:
-            vlan = port
-            ip_address = ip_dict[port]
-            config += f"interface {vlan}\n"
-            config += f"   ip address {ip_address}\n"
-            config += "   no shutdown\n"
-            config += "   exit\n"
+    # Clean the configuration by stripping whitespaces
+    config = config.strip()
 
-    # Configure physical interfaces
-    for port in active_ports:
-        if port.startswith("GigabitEthernet") and port in ip_dict:
-            interface = port
-            ip_address = ip_dict[port]
-            config += f"interface {interface}\n"
-            config += f"   ip address {ip_address}\n"
-            config += "   no shutdown\n"
-            config += "   exit\n"
-
-    # Configure VTP
-    if vtp_domain:
-        config += f"vtp domain {vtp_domain}\n"
-        if vtp_mode:
-            config += f"vtp mode {vtp_mode}\n"
-        config += "exit\n"
-
-    # Print the switch configuration
+    # Print the configuration
+    print("Generated Configuration:")
     print(config)
+
+    # Save the configuration to a file if specified
+    if save_config:
+        with open(save_config, "w") as file:
+            config_list = config.split('\n')
+            config_list = [each.strip() for each in config_list]
+            for each in config_list:
+                file.write(each + '\n')
+
+        print(f"Configuration saved to {save_config}")
 
 
 if __name__ == "__main__":
