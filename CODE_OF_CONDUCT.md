@@ -36,7 +36,7 @@ The following behaviors are considered unacceptable within our community:
 
 ## Reporting Violations
 
-If you experience or witness any behavior that violates the Code of Conduct, please report it immediately. You can contact the project maintainers at [contact-email@example.com]. All reports will be reviewed and treated with strict confidentiality. We are committed to taking appropriate actions in response to any confirmed violations.
+If you experience or witness any behavior that violates the Code of Conduct, please report it immediately. You can contact the project maintainers at [vince.dev@icloud.com]. All reports will be reviewed and treated with strict confidentiality. We are committed to taking appropriate actions in response to any confirmed violations.
 
 ## Consequences of Unacceptable Behavior
 
