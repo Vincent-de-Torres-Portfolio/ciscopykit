@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='ciscopykit',
-    version='1.4.2',
+    version='1.5.2',
     author='devinci-it',
     author_email='vince.dev@icloud.com',
     description='A network management toolkit for Cisco devices keeping track of devices when using GNS3 / Cisco Packet Tracer',
@@ -27,14 +27,15 @@ setup(
         'networkx',
         'matplotlib',
         'ipaddress',
-        'argeparse'
+        'argparse'
     ],
     entry_points={
         'console_scripts': [
             'ciscopykit = ciscopykit.entry_point:main',
             'switch = ciscopykit.switch.app:main',
             'services=ciscopykit.services.app:main',
-            'vlan=ciscopykit.vlan.app:main'
+            'vlan=ciscopykit.vlan.app:main',
+            'lan_security = ciscopykit.lan_security.app:main'
         ],
     },
 )

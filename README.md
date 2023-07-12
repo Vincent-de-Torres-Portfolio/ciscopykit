@@ -1,29 +1,28 @@
-<!-- ![logo](assets/img/logo.svg) -->
-# **`ciscopykit`**
+# CiscoPyKit - Network Management Toolkit for Cisco Devices
 
----
- 
 ![logo](assets/img/logo.svg)
 
----
-
-CiscoPyKit is a network management toolkit for Cisco devices. It provides classes and methods to manage network devices, interfaces, and configurations.
+CiscoPyKit is a powerful and comprehensive network management toolkit designed specifically for Cisco devices. It simplifies the management and configuration of network devices, interfaces, and services, while also providing advanced features for network security.
 
 ## Features
 
----
+- Device Management: Add, remove, and modify Cisco devices effortlessly.
+- Interface Management: Assign and remove IP addresses for network interfaces with ease.
+- Configuration Management: Retrieve and update device configurations seamlessly.
+- Network Visualization: Generate clear and intuitive network topology diagrams for better visualization.
+- DHCP Service Configuration: Configure DHCP on network devices to efficiently manage IP address assignment.
+- Port Address Translation (PAT) Configuration: Configure Port Address Translation (PAT) for simplified network address translation.
+- L3 Switch Configuration: Generate and configure Layer 3 switch settings effortlessly.
+- LAN Security Features:
+  - Switchport Security: Configure security settings for switchports to prevent unauthorized access.
+  - VLAN Security: Manage VLANs and configure VLAN-based security policies to control traffic flow.
+  - DHCP Snooping: Enable and configure DHCP snooping to protect against rogue DHCP servers.
+  - Dynamic ARP Inspection: Validate ARP packets to prevent ARP spoofing attacks.
+  - STP Security: Enhance Spanning Tree Protocol (STP) security to safeguard against STP-based attacks.
 
-- Device management: Add, remove, and modify Cisco devices.
-- Interface management: Assign and remove IP addresses for network interfaces.
-- Configuration management: Retrieve and update device configurations.
-- Network visualization: Generate network topology diagrams.
-- DHCP service configuration: Configure DHCP on a network device.
-- PAT service configuration: Configure Port Address Translation (PAT) on a network device.
-- L3 switch configuration: Generate and configure L3 switch settings.
+For detailed instructions and further information, please refer to the [README.md](#features) on each package.
 
 ## Installation
-
----
 
 Use pip to install CiscoPyKit:
 
@@ -33,9 +32,7 @@ pip install ciscopykit
 
 ## Usage
 
----
-
-The package provides a command-line interface (CLI) that uses argparse to configure network services. Here's how you can use each subpackage on the command line:
+CiscoPyKit provides a user-friendly command-line interface (CLI) that simplifies the configuration and management of Cisco devices. Below are examples of how to use different subpackages:
 
 ### Device Management
 
@@ -148,7 +145,7 @@ python -m ciscopykit.services.app pat eth0 "192.168.0.0/24" "10.0.0.0/16" eth1 "
 
 ### L3 Switch Configuration
 
-To generate and configure L3 switch settings, use the following command:
+To generate and configure Layer 3 switch settings, use the following command:
 
 ```
 python -m ciscopykit.switch.app <switch_model> <port_list> <active_port_list> <routing_protocol> [--ip-dict <ip_dictionary>] [--hostname <switch_hostname>] [--subnet <subnet>] [--save-config <config_file_path>]
@@ -160,13 +157,63 @@ Example usage:
 python -m ciscopykit.switch.app "Cisco 3750" "GigabitEthernet1/0/1,GigabitEthernet1/0/2,VLAN10,VLAN20" "GigabitEthernet1/0/1,GigabitEthernet1/0/2" "OSPF" --ip-dict "{'VLAN10': '10.0.0.1/24', 'VLAN20': '20.0.0.1/24', 'Gi0/0':'10.10.11.1/30'}" --hostname "LA_SW1" --subnet "10.0.0.0/16" --save-config ./config.txt
 ```
 
-For more detailed usage instructions, please refer to the [documentation](https://github.com/devinci-it/ciscopykit).
+
+
+## LAN Security Features
+
+CiscoPyKit also provides advanced LAN Security features to enhance network security and protect against various threats. These features include:
+
+### Switchport Security Module
+
+The Switchport Security module enables you to configure security settings for switchports, preventing unauthorized access to the network. It offers fine-grained control over switchport security parameters such as the maximum number of MAC addresses allowed, violation actions, aging time, and sticky MAC address configuration. 
+
+To use the Switchport Security module, import the `configure_switchport_security` function from `lan_security.switchport_security` and follow the provided usage examples to configure switchport security settings tailored to your network requirements.
+
+### Usage
+
+```
+# Assuming proper module imports
+
+interface = "GigabitEthernet1/0/1"
+max_mac = 5
+config = configure_switchport_security(interface, max_mac)
+print(config)
+```
+
+Output:
+```
+interface GigabitEthernet1/0/1
+switchport mode access
+switchport port-security
+switchport port-security maximum 5
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+```
+
+### VLAN Security (Coming Soon)
+
+The VLAN Security module provides the capability to manage VLANs and configure VLAN-based security policies. It allows you to create, delete, and modify VLANs, as well as define security policies that control traffic flow between VLANs, enhancing network segmentation and security.
+
+### DHCP Snooping (Coming Soon)
+
+The
+
+ DHCP Snooping module enables you to enable and configure DHCP snooping on network devices. By actively monitoring DHCP traffic and verifying DHCP server legitimacy, DHCP snooping prevents rogue DHCP servers from distributing malicious IP addresses and enhances overall network security.
+
+### Dynamic ARP Inspection (Coming Soon)
+
+The Dynamic ARP Inspection module validates ARP packets to prevent ARP spoofing attacks, which can lead to unauthorized network access and data breaches. By inspecting ARP traffic and filtering out malicious or unauthorized ARP packets, Dynamic ARP Inspection enhances network security and prevents potential threats.
+
+### STP Security (Coming Soon)
+
+The STP Security module enhances Spanning Tree Protocol (STP) security to protect against STP-based attacks, such as BPDU spoofing or manipulation. By applying appropriate STP security measures, such as BPDU guard or root guard, you can ensure the integrity and stability of your network infrastructure.
+
+Stay tuned for the upcoming releases of these LAN Security features!
 
 ## Contributing
 
-Contributions are welcome! If you have any bug reports, feature requests, or suggestions, please open an issue on GitHub. If you would like to contribute code, please fork the repository, make your changes, and submit a pull request.
+Contributions to CiscoPyKit are welcome! If you encounter any issues, have feature requests, or want to contribute code, please feel free to open an issue or submit a pull request on GitHub.
 
 ## License
 
 CiscoPyKit is licensed under the [MIT License](LICENSE).
-```
