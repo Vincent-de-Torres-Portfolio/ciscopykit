@@ -1,4 +1,4 @@
-def configure_switchport_security(interface, max_mac, violation_action='restrict', aging_time=None, sticky_mac=True):
+def generate_switchport_security_config(interface, max_mac, violation_action='restrict', aging_time=None, sticky_mac=True):
     """
     Generate the configuration command for switchport security.
 
