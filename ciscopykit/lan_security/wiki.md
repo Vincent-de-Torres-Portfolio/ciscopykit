@@ -93,3 +93,92 @@ Output:
 ValueError: Invalid violation action. It must be 'restrict', 'protect', or 'shutdown'.
 ```
 
+## `dhcp_snooping` module
+
+The `generate_dhcp_snooping_config` function in the `dhcp_snooping` module is part of the LAN Security package. It enables you to generate the configuration commands for DHCP snooping on Cisco IOS devices. DHCP snooping is a security feature that prevents unauthorized DHCP servers from providing IP configuration to network clients and mitigates potential DHCP-related attacks.
+
+### Function Signature
+
+```python
+def generate_dhcp_snooping_config(interface, trust_ports=None):
+```
+
+#### Parameters
+
+- `interface` (str): The name of the interface on which DHCP snooping will be enabled.
+- `trust_ports` (list or None, optional): A list of interface names to be trusted by DHCP snooping. If provided, DHCP snooping will not inspect DHCP traffic on these trusted ports. If not specified or set to `None`, all ports except the interface specified will be trusted.
+
+#### Returns
+
+- `str`: The configuration commands for DHCP snooping.
+
+### Usage Example
+
+Here's an example of using the `generate_dhcp_snooping_config` function to configure DHCP snooping:
+
+```python
+interface = "GigabitEthernet1/0/1"
+trust_ports = ["GigabitEthernet1/0/2", "GigabitEthernet1/0/3"]
+config = generate_dhcp_snooping_config(interface, trust_ports)
+print(config)
+```
+
+**Output:**
+
+```
+ip dhcp snooping
+!
+interface GigabitEthernet1/0/1
+  ip dhcp snooping trust
+!
+interface GigabitEthernet1/0/2
+  ip dhcp snooping trust
+!
+interface GigabitEthernet1/0/3
+  ip dhcp snooping trust
+```
+
+In this example, the `generate_dhcp_snooping_config` function is called with the interface `"GigabitEthernet1/0/1"` and a list of trusted ports `["GigabitEthernet1/0/2", "GigabitEthernet1/0/3"]`. The function generates the DHCP snooping configuration commands, which include enabling DHCP snooping globally and trusting the specified interface and ports.
+
+## `dynamic_arp_inspection` module
+
+The `generate_dai_config` function in the `dynamic_arp_inspection` module is part of the LAN Security package. It allows you to generate the configuration commands for Dynamic ARP Inspection (DAI) on Cisco IOS devices. DAI validates ARP packets on the network, protecting against ARP spoofing and other ARP-based attacks.
+
+### Function Signature
+
+```python
+def generate_dai_config(interfaces):
+```
+
+#### Parameters
+
+- `interfaces` (list): A list of interfaces on which Dynamic ARP Inspection (DAI) should be enabled.
+
+#### Returns
+
+- `str`: The configuration commands for DAI.
+
+### Usage Example
+
+Here's an example of using the `generate_dai_config` function to configure Dynamic ARP Inspection (DAI):
+
+```python
+interfaces = ["GigabitEthernet1/0/1", "GigabitEthernet1/0/2", "GigabitEthernet1/0/3"]
+config = generate_dai_config(interfaces)
+print(config)
+```
+
+**Output:**
+
+```
+ip arp inspection
+!
+interface GigabitEthernet1/0/1
+ip arp inspection trust
+!
+interface GigabitEthernet1/0/2
+ip arp inspection trust
+!
+interface GigabitEthernet1/0/3
+ip arp inspection trust
+```
