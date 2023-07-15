@@ -158,7 +158,7 @@ name.
             list: The list of active interfaces.
         """
         return self.active_interfaces
-        @staticmethod
+    @staticmethod
     def generate_init_config(hostname, site, interface_range="GigabitEthernet0/0-10", static_pass="cisco", motd="Welcome to the Cisco network!"):
         """
         Generates the initial configuration for the device.
