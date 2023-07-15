@@ -1,6 +1,7 @@
 import argparse
 from ciscopykit.lan_security.switchport_security import generate_switchport_security_config
 from ciscopykit.lan_security.dhcp_snooping import generate_dhcp_snooping_config
+from ciscopykit.lan_security.dynamic_arp_inspection import generate_dai_config
 
 
 def configure_switchport_security(args):
@@ -27,6 +28,18 @@ def configure_dhcp_snooping(args):
     """
     dhcp_snooping_config = generate_dhcp_snooping_config(args.interface, args.trust_ports)
     print(dhcp_snooping_config)
+
+
+def configure_dai(args):
+    """
+    Generates and prints the Dynamic ARP Inspection (DAI) configuration based on the provided arguments.
+
+    Args:
+        args (argparse.Namespace): Parsed arguments containing DAI configuration details.
+
+    """
+    dai_config = generate_dai_config(args.interfaces)
+    print(dai_config)
 
 
 def main():
@@ -62,6 +75,13 @@ def main():
         "trust_ports", nargs="+", type=str, help="List of trusted interface names"
     )
     dhcp_snooping_parser.set_defaults(func=configure_dhcp_snooping)
+
+    # Subcommand: dai
+    dai_parser = subparsers.add_parser("dai")
+    dai_parser.add_argument(
+        "interfaces", nargs="+", type=str, help="List of interfaces for Dynamic ARP Inspection"
+    )
+    dai_parser.set_defaults(func=configure_dai)
 
     args = parser.parse_args()
 
