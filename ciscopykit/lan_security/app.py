@@ -2,6 +2,7 @@ import argparse
 from ciscopykit.lan_security.switchport_security import generate_switchport_security_config
 from ciscopykit.lan_security.dhcp_snooping import generate_dhcp_snooping_config
 from ciscopykit.lan_security.dynamic_arp_inspection import generate_dai_config
+from ciscopykit.lan_security.stp_security import configure_stp_security
 
 
 def configure_switchport_security(args):
@@ -10,7 +11,6 @@ def configure_switchport_security(args):
 
     Args:
         args (argparse.Namespace): Parsed arguments containing switchport security configuration details.
-
     """
     switchport_security_config = generate_switchport_security_config(
         args.interface, args.max_mac, args.violation_action, args.aging_time, not args.disable_sticky_mac
@@ -24,7 +24,6 @@ def configure_dhcp_snooping(args):
 
     Args:
         args (argparse.Namespace): Parsed arguments containing DHCP snooping configuration details.
-
     """
     dhcp_snooping_config = generate_dhcp_snooping_config(args.interface, args.trust_ports)
     print(dhcp_snooping_config)
@@ -36,10 +35,20 @@ def configure_dai(args):
 
     Args:
         args (argparse.Namespace): Parsed arguments containing DAI configuration details.
-
     """
     dai_config = generate_dai_config(args.interfaces)
     print(dai_config)
+
+
+def configure_stp_sec(args):
+    """
+    Generates and prints the STP security configuration based on the provided arguments.
+
+    Args:
+        args (argparse.Namespace): Parsed arguments containing STP security configuration details.
+    """
+    stp_sec_config = configure_stp_security(args.interface)
+    print(stp_sec_config)
 
 
 def main():
@@ -82,6 +91,13 @@ def main():
         "interfaces", nargs="+", type=str, help="List of interfaces for Dynamic ARP Inspection"
     )
     dai_parser.set_defaults(func=configure_dai)
+
+    # Subcommand: stp_sec
+    stp_sec_parser = subparsers.add_parser("stp_sec")
+    stp_sec_parser.add_argument(
+        "interface", type=str, help="Interface name"
+    )
+    stp_sec_parser.set_defaults(func=configure_stp_sec)
 
     args = parser.parse_args()
 

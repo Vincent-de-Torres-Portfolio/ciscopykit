@@ -182,3 +182,43 @@ ip arp inspection trust
 interface GigabitEthernet1/0/3
 ip arp inspection trust
 ```
+
+## `stp_security` module
+
+The `configure_stp_security` function in the LAN Security package is used to configure PortFast and BPDU Guard on the specified interface. This function ensures enhanced security and prevents unauthorized access on the network.
+
+## Function Signature
+
+```python
+def configure_stp_security(interface):
+```
+
+#### Parameters
+
+- `interface` (str): The name of the interface on which to configure PortFast and BPDU Guard.
+
+#### Returns
+
+- `str`: The configuration commands for enabling PortFast and BPDU Guard on the interface.
+
+#### Raises
+
+- `ValueError`: If the interface name is not valid.
+
+## Usage Example
+
+Here's an example of using the `configure_stp_security` function to configure PortFast and BPDU Guard on an interface:
+
+```python
+interface = "GigabitEthernet1/0/1"
+config = configure_stp_security(interface)
+print(config)
+```
+
+**Output:**
+
+```
+spanning-tree portfast default
+interface GigabitEthernet1/0/1
+spanning-tree bpduguard enable
+```
