@@ -1,3 +1,22 @@
+"""
+LAN Security Configuration Tool
+
+This tool provides a command-line interface for configuring various LAN security features. 
+It supports the configuration of switchport security, DHCP snooping, Dynamic ARP Inspection 
+(DAI), and STP security settings.
+
+Usage:
+    python app.py [subcommand] [arguments]
+
+Subcommands:
+    switchport_security  Configure switchport security settings.
+    dhcp_snooping        Configure DHCP snooping settings.
+    dai                  Configure Dynamic ARP Inspection (DAI) settings.
+    stp_sec              Configure STP security settings.
+
+For more information on each subcommand, use `python app.py [subcommand] --help`.
+"""
+
 import argparse
 from ciscopykit.lan_security.switchport_security import generate_switchport_security_config
 from ciscopykit.lan_security.dhcp_snooping import generate_dhcp_snooping_config
@@ -25,7 +44,8 @@ def configure_dhcp_snooping(args):
     Args:
         args (argparse.Namespace): Parsed arguments containing DHCP snooping configuration details.
     """
-    dhcp_snooping_config = generate_dhcp_snooping_config(args.interface, args.trust_ports)
+    dhcp_snooping_config = generate_dhcp_snooping_config(
+        args.interface, args.trust_ports)
     print(dhcp_snooping_config)
 
 
@@ -36,7 +56,7 @@ def configure_dai(args):
     Args:
         args (argparse.Namespace): Parsed arguments containing DAI configuration details.
     """
-    dai_config = generate_dai_config(args.interfaces)
+    dai_config = generate_dai_config(args.interfaces, args.vlan)
     print(dai_config)
 
 
@@ -89,6 +109,9 @@ def main():
     dai_parser = subparsers.add_parser("dai")
     dai_parser.add_argument(
         "interfaces", nargs="+", type=str, help="List of interfaces for Dynamic ARP Inspection"
+    )
+    dai_parser.add_argument(
+        "--vlan", type=int, help="VLAN ID for DAI configuration"
     )
     dai_parser.set_defaults(func=configure_dai)
 
