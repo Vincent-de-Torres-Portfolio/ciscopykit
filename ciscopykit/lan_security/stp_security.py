@@ -1,3 +1,18 @@
+"""
+Module: stp_security
+
+This module provides functions to configure Spanning Tree Protocol (STP) security features such as PortFast and BPDU Guard.
+
+Functions:
+- configure_portfast_default(): Configures PortFast on all access ports by default.
+- configure_bpdu_guard(interface): Configures BPDU Guard on the specified interface.
+- configure_stp_security(interface): Configures PortFast and BPDU Guard on the specified interface.
+
+Raises:
+- ValueError: If the interface name is not valid.
+"""
+
+
 def configure_portfast_default():
     """
     Configures PortFast on all access ports by default.
@@ -22,7 +37,8 @@ def configure_bpdu_guard(interface):
     Raises:
         ValueError: If the interface name is not valid.
     """
-    valid_interface_types = ["GigabitEthernet", "FastEthernet", "Ethernet", "Serial", "Portchannel", "VLAN"]
+    valid_interface_types = [
+        "GigabitEthernet", "FastEthernet", "Ethernet", "Serial", "Portchannel", "VLAN"]
     interface_type = interface.split()[0]
 
     if interface_type not in valid_interface_types:
@@ -48,7 +64,8 @@ def configure_stp_security(interface):
     Raises:
         ValueError: If the interface name is not valid.
     """
-    valid_interface_types = ["GigabitEthernet", "FastEthernet", "Ethernet", "Serial", "Portchannel", "VLAN"]
+    valid_interface_types = [
+        "GigabitEthernet", "FastEthernet", "Ethernet", "Serial", "Portchannel", "VLAN"]
     interface_type = interface.split()[0]
 
     if interface_type not in valid_interface_types:

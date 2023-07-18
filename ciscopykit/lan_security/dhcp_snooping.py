@@ -1,3 +1,29 @@
+"""
+Module: dhcp_snooping
+
+This module provides a function to generate a DHCP snooping configuration for an IOS device.
+
+Function:
+- generate_dhcp_snooping_config(interface, trust_ports): Generates a DHCP snooping configuration for an IOS device.
+
+Args:
+- interface (str): The interface on which DHCP snooping should be enabled.
+- trust_ports (list): A list of interfaces that should be trusted by DHCP snooping.
+
+Returns:
+- str: The DHCP snooping configuration that can be copied and pasted onto an IOS device.
+
+Raises:
+- ValueError: If interface or trust_ports are not provided.
+
+Usage:
+    interface = 'GigabitEthernet0/1'
+    trust_ports = ['GigabitEthernet0/2', 'GigabitEthernet0/3']
+    dhcp_snooping_config = generate_dhcp_snooping_config(interface, trust_ports)
+    print(dhcp_snooping_config)
+
+"""
+
 def generate_dhcp_snooping_config(interface, trust_ports):
     """
     Generates a DHCP snooping configuration for an IOS device.

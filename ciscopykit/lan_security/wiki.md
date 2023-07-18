@@ -222,3 +222,31 @@ spanning-tree portfast default
 interface GigabitEthernet1/0/1
 spanning-tree bpduguard enable
 ```
+
+## `vlan_security` module
+
+This module provides functions to configure VLAN security features.
+
+## Functions:
+- configure_trunk_interfaces(interface_range): Configures trunk interfaces with non-negotiating trunks and assigns them to a default VLAN.
+- configure_unused_ports(interface_range, unused_vlan): Configures unused ports as access ports, assigns them to a specified VLAN, and shuts down the ports.
+- configure_access_ports(interface_range): Configures access ports to prevent trunking.
+
+## Usage Example: 
+
+#### Configure trunk interfaces
+trunk_interfaces = "fa0/1 - 4"
+trunk_config = configure_trunk_interfaces(trunk_interfaces)
+print(trunk_config)
+
+#### Configure unused ports
+unused_ports = "fa0/5 - 10"
+unused_vlan = 86
+unused_config = configure_unused_ports(unused_ports, unused_vlan)
+print(unused_config)
+
+#### Configure access ports
+access_ports = "fa0/11 - 24"
+access_config = configure_access_ports(access_ports)
+print(access_config)
+"""
