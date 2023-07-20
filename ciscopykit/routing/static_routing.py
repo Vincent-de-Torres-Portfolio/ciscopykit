@@ -34,3 +34,26 @@ def configure_static_route(destination, next_hop, administrative_distance=1):
 
     command = f"ip route {network_address.network_address} {netmask} {next_hop} {administrative_distance}"
     return command
+
+
+def configure_default_route(next_hop):
+    """
+    Configures a default static route on the Cisco IOS device.
+
+    Args:
+        next_hop (str or ipaddress.IPv4Address): The next-hop IP address or exit interface for the default static route.
+        exit_interface (str): The exit interface for the default static route.
+
+    Returns:
+        str: The configuration command for adding the default static route.
+
+    Raises:
+        ValueError: If the next_hop is not a valid IPv4 address.
+    """
+    try:
+        next_hop = ipaddress.IPv4Address(next_hop)
+    except ipaddress.AddressValueError:
+        raise ValueError("Invalid IPv4 address.")
+
+    command = f"ip route 0.0.0.0 0.0.0.0 {next_hop}"
+    return command
