@@ -8,7 +8,6 @@ Functions:
 - configure_static_route(destination, next_hop, administrative_distance=1): Configures a static route on the device.
 - configure_default_route(next_hop, exit_interface): Configures a default route on the device.
 - configure_route_redistribution(source_protocol, destination_protocol): Configures route redistribution between routing protocols.
-
 """
 
 import ipaddress
