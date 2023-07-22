@@ -28,6 +28,8 @@ Example:
     rip_config = rip_protocol.generate_config()
 
     print(rip_config)
+    
+    
 
 """
 import ipaddress
@@ -106,6 +108,15 @@ class RIP(DynamicRoutingProtocol):
 
     Raises:
         ValueError: If the version is not 1 or 2.
+    Usage:
+        ```
+        networks = ["192.168.0.0", "10.0.0.0"]
+        passive_interfaces = ["GigabitEthernet0/1", "GigabitEthernet0/2"]
+
+        rip_protocol = RIP(version=2, networks=networks, no_auto_summary=True, passive_interfaces=passive_interfaces)
+        rip_config = rip_protocol.generate_config()
+
+        print(rip_config) ```
     """
 
     def __init__(self, version, networks, no_auto_summary=False, passive_interfaces=None):
@@ -162,19 +173,6 @@ class RIP(DynamicRoutingProtocol):
         # Implementation to generate RIP configuration
         return self.configure()
     
-class EIGRP(DynamicRoutingProtocol):
-    def __init__(self, as_number, network):
-        super().__init__(network)
-        self.as_number = as_number
-
-    def configure(self):
-        # Implementation to configure EIGRP routing protocol
-        pass
-
-    def generate_config(self):
-        # Implementation to generate EIGRP configuration
-        pass
-
 class OSPF(DynamicRoutingProtocol):
     """
     Class representing the OSPF (Open Shortest Path First) routing protocol.
@@ -190,6 +188,23 @@ class OSPF(DynamicRoutingProtocol):
     Raises:
         ValueError: If the process ID is not a positive integer.
         ValueError: If the provided IP addresses are not valid.
+        
+    Usage:
+    ```
+        ospf_options = {
+            'networks': ['192.168.1.0/24', '10.0.0.0/16'],
+            'passive_interfaces': ['GigabitEthernet0/1', 'Serial0/0/0'],
+            'default_route': True
+        }
+
+        ospf_instance = OSPF(process_id=10, router_id='6.6.6.6', ospf_options=ospf_options)
+
+        # Generate OSPF configuration
+        ospf_config = ospf_instance.generate_config()
+
+        # Print the generated configuration
+        print(ospf_config)
+    ```
     """
 
     def __init__(self, process_id, router_id, ospf_options=None):
@@ -250,31 +265,17 @@ class OSPF(DynamicRoutingProtocol):
     def generate_config(self):
         return self.configure()
 
+class EIGRP(DynamicRoutingProtocol):
+    def __init__(self, as_number, network):
+        super().__init__(network)
+        self.as_number = as_number
 
-# Example usage
+    def configure(self):
+        # Implementation to configure EIGRP routing protocol
+        pass
 
-networks = ["192.168.0.0", "10.0.0.0"]
-passive_interfaces = ["GigabitEthernet0/1", "GigabitEthernet0/2"]
+    def generate_config(self):
+        # Implementation to generate EIGRP configuration
+        pass
 
-rip_protocol = RIP(version=2, networks=networks, no_auto_summary=True, passive_interfaces=passive_interfaces)
-rip_config = rip_protocol.generate_config()
-
-print(rip_config)
-
-##################################
-# OSPF                          #
-#################################
-ospf_options = {
-    'networks': ['192.168.1.0/24', '10.0.0.0/16'],
-    'passive_interfaces': ['GigabitEthernet0/1', 'Serial0/0/0'],
-    'default_route': True
-}
-
-ospf_instance = OSPF(process_id=10, router_id='6.6.6.6', ospf_options=ospf_options)
-
-# Generate OSPF configuration
-ospf_config = ospf_instance.generate_config()
-
-# Print the generated configuration
-print(ospf_config)
 

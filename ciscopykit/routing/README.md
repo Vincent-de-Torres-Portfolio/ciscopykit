@@ -78,6 +78,80 @@ This module provides a set of functions that allow you to configure static route
 
 ### `dynamic_routing.py`
 
-``` python
-# work in progress
+This module provides classes to configure and generate dynamic routing protocols on Cisco devices.
+
+#### Classes:
+
+##### `DynamicRoutingProtocol`
+
+Base class for dynamic routing protocols.
+
+This class serves as a template for implementing dynamic routing protocols in CiscoPyKit. Subclasses must implement the `configure` and `generate_config` methods to configure the respective routing protocols on the device and generate the configuration.
+
+**Attributes:**
+- `networks` (list): A list of network addresses to be advertised.
+
+**Methods:**
+- `configure()`: Abstract method to configure the dynamic routing protocol on the device. Subclasses must implement this method.
+- `generate_config()`: Abstract method to generate the configuration for the dynamic routing protocol. Subclasses must implement this method.
+
+**Raises:**
+- `NotImplementedError`: Raised when 'configure' and 'generate_config' methods are not implemented by the subclass.
+
+##### `RIP`
+
+Class representing the RIP (Routing Information Protocol) routing protocol.
+
+RIP is a dynamic routing protocol that is widely used in small to medium-sized networks. It is a distance-vector protocol and uses hop count as the metric to calculate the best path to a destination network.
+
+**Attributes:**
+- `version` (int): The version of RIP to use (1 or 2).
+- `networks` (list): A list of networks to advertise with RIP.
+- `no_auto_summary` (bool, optional): Whether to disable auto-summary (default: False).
+- `passive_interfaces` (list, optional): A list of interfaces to be set as passive (default: None).
+
+**Methods:**
+- `configure()`: Configures the RIP routing protocol on the device.
+- `generate_config()`: Generates the configuration for the RIP routing protocol.
+
+**Raises:**
+- `ValueError`: If the version is not 1 or 2.
+
+##### `OSPF`
+
+Class representing the OSPF (Open Shortest Path First) routing protocol.
+
+OSPF is a link-state routing protocol that is widely used in large networks. It uses Dijkstra's algorithm to calculate the shortest path to a destination network.
+
+**Attributes:**
+- `process_id` (int): The OSPF process ID.
+- `router_id` (str): The OSPF router ID.
+- `ospf_options` (dict, optional): Dictionary containing OSPF-specific options (default: None).
+
+**Methods:**
+- `configure()`: Configures OSPF routing protocol on the device.
+- `generate_config()`: Generates the configuration for the OSPF routing protocol.
+
+**Raises:**
+- `ValueError`: If the process ID is not a positive integer.
+- `ValueError`: If the provided IP addresses are not valid.
+
+**Usage Example:**
+
+```python
+ospf_options = {
+    'networks': ['192.168.1.0/24', '10.0.0.0/16'],
+    'passive_interfaces': ['GigabitEthernet0/1', 'Serial0/0/0'],
+    'default_route_interface': 'GigabitEthernet0/0'
+}
+
+ospf_instance = OSPF(process_id=10, router_id='6.6.6.6', ospf_options=ospf_options)
+
+# Generate OSPF configuration
+ospf_config = ospf_instance.generate_config()
+
+# Print the generated configuration
+print(ospf_config)
 ```
+
+This module provides classes that allow you to configure and generate dynamic routing protocols such as OSPF and RIP on Cisco devices. The example usage above demonstrates how to use the `OSPF` class to configure OSPF with specific options and print the resulting configuration commands. 
