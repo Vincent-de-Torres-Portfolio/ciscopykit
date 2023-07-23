@@ -10,9 +10,9 @@ CiscoPyKit is a powerful and comprehensive network management toolkit designed s
 - Interface Management: Assign and remove IP addresses for network interfaces with ease. *
 - Configuration Management: Retrieve and update device configurations seamlessly. *
 -  IP Services Features :
-  - DHCP Service Configuration: Configure DHCP on network devices to efficiently manage IP address assignment.
-  - Port Address Translation (PAT) Configuration: Configure Port Address Translation (PAT) for simplified network address translation.
-  - L3 Switch Configuration: Generate and configure Layer 3 switch settings effortlessly.
+    - DHCP Service Configuration: Configure DHCP on network devices to efficiently manage IP address assignment.
+    - Port Address Translation (PAT) Configuration: Configure Port Address Translation (PAT) for simplified network address translation.
+    - L3 Switch Configuration: Generate and configure Layer 3 switch settings effortlessly.
 - LAN Security Features:
   - [Switchport Security](lan_security/README.md#switchport-security-module): Configure security settings for switchports to prevent unauthorized access.
   - [VLAN Security](lan_security/README.md#vlan-security-module): Manage VLANs and configure VLAN-based security policies to control traffic flow.
