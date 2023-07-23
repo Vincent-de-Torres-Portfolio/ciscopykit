@@ -264,18 +264,128 @@ class OSPF(DynamicRoutingProtocol):
     
     def generate_config(self):
         return self.configure()
-
 class EIGRP(DynamicRoutingProtocol):
-    def __init__(self, as_number, network):
-        super().__init__(network)
+    """
+    Class representing the EIGRP (Enhanced Interior Gateway Routing Protocol) routing protocol.
+
+    EIGRP is a distance-vector routing protocol that is widely used in Cisco networks.
+    It uses Diffusing Update Algorithm (DUAL) to calculate the shortest path to a destination network.
+
+    Attributes:
+        as_number (int): The EIGRP autonomous system number.
+        networks (list): A list of network addresses to be advertised.
+        active_interfaces (list, optional): A list of interfaces to enable EIGRP on (default: None).
+        metric_bandwidth (int, optional): Bandwidth metric for EIGRP (default: 1000).
+        metric_delay (int, optional): Delay metric for EIGRP (default: 1).
+        metric_reliability (int, optional): Reliability metric for EIGRP (default: 255).
+        metric_load (int, optional): Load metric for EIGRP (default: 1).
+        metric_mtu (int, optional): MTU metric for EIGRP (default: 1500).
+
+    Raises:
+        ValueError: If the AS number is not in the valid range (1 to 65535).
+        ValueError: If the provided IP addresses are not valid.
+
+    Usage:
+    ```
+        eigrp_options = {
+            'networks': ['192.168.1.0/24', '10.0.0.0/16'],
+            'active_interfaces': ['GigabitEthernet0/1', 'Serial0/0/0'],
+            'metric_bandwidth': 2000,
+            'metric_delay': 10,
+            'metric_reliability': 255,
+            'metric_load': 1,
+            'metric_mtu': 1500
+        }
+
+        eigrp_instance = EIGRP(as_number=100, **eigrp_options)
+
+        # Generate EIGRP configuration
+        eigrp_config = eigrp_instance.generate_config()
+
+        # Print the generated configuration
+        print(eigrp_config)
+    ```
+    """
+
+    def __init__(self, as_number, networks, active_interfaces=None,
+                 metric_bandwidth=1000, metric_delay=1, metric_reliability=255, metric_load=1, metric_mtu=1500):
+        """
+        Initialize an EIGRP routing protocol.
+
+        Args:
+            as_number (int): The EIGRP autonomous system number.
+            networks (list): A list of network addresses to be advertised.
+            active_interfaces (list, optional): A list of interfaces to enable EIGRP on (default: None).
+            metric_bandwidth (int, optional): Bandwidth metric for EIGRP (default: 1000).
+            metric_delay (int, optional): Delay metric for EIGRP (default: 1).
+            metric_reliability (int, optional): Reliability metric for EIGRP (default: 255).
+            metric_load (int, optional): Load metric for EIGRP (default: 1).
+            metric_mtu (int, optional): MTU metric for EIGRP (default: 1500).
+
+        Raises:
+            ValueError: If the AS number is not in the valid range (1 to 65535).
+            ValueError: If the provided IP addresses are not valid.
+        """
+        if not (1 <= as_number <= 65535):
+            raise ValueError("Invalid EIGRP AS number. The AS number must be in the range 1 to 65535.")
+
+        super().__init__(networks)
         self.as_number = as_number
+        self.active_interfaces = active_interfaces or []
+        self.metric_bandwidth = metric_bandwidth
+        self.metric_delay = metric_delay
+        self.metric_reliability = metric_reliability
+        self.metric_load = metric_load
+        self.metric_mtu = metric_mtu
+
+    def _validate_networks(self, networks):
+        validated_networks = []
+        for network in networks:
+            try:
+                ip_net = ipaddress.IPv4Network(network)
+                validated_networks.append(ip_net)
+            except ipaddress.AddressValueError:
+                raise ValueError(f"Invalid network address: {network}")
+        return validated_networks
+
+    def _get_network_address_and_wildcard_mask(self, network):
+        network_address = str(network.network_address)
+        wildcard_mask = str(network.hostmask)
+        return network_address, wildcard_mask
 
     def configure(self):
-        # Implementation to configure EIGRP routing protocol
-        pass
+        """
+        Configure EIGRP routing protocol on the device.
+
+        Returns:
+            str: The configuration commands for configuring EIGRP.
+        """
+        eigrp_config = [f"router eigrp {self.as_number}"]
+
+        eigrp_config.append("passive-interface default")
+        for interface in self.active_interfaces:
+            eigrp_config.append(f"no passive-interface {interface}")
+
+        for network in self.networks:
+            
+            network_address, wildcard_mask = self._get_network_address_and_wildcard_mask(ipaddress.IPv4Network(network))
+            eigrp_config.append(f"network {network_address} {wildcard_mask}")
+
+        eigrp_config.append(f"metric weights {self.metric_bandwidth} {self.metric_delay} "
+                            f"{self.metric_reliability} {self.metric_load} {self.metric_mtu}")
+
+        return "\n".join(eigrp_config)
 
     def generate_config(self):
-        # Implementation to generate EIGRP configuration
-        pass
+        return self.configure()
 
 
+# Example: Configure EIGRP routing protocol
+as_number = 100
+networks = ["192.168.1.0/24", "10.0.0.0/16"]
+active_interfaces = ["GigabitEthernet0/1", "Serial0/0/0"]
+
+eigrp_protocol = EIGRP(as_number=as_number, networks=networks, active_interfaces=active_interfaces)
+eigrp_config = eigrp_protocol.generate_config()
+
+print(eigrp_config)
