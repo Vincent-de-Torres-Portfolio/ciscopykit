@@ -378,14 +378,3 @@ class EIGRP(DynamicRoutingProtocol):
 
     def generate_config(self):
         return self.configure()
-
-
-# Example: Configure EIGRP routing protocol
-as_number = 100
-networks = ["192.168.1.0/24", "10.0.0.0/16"]
-active_interfaces = ["GigabitEthernet0/1", "Serial0/0/0"]
-
-eigrp_protocol = EIGRP(as_number=as_number, networks=networks, active_interfaces=active_interfaces)
-eigrp_config = eigrp_protocol.generate_config()
-
-print(eigrp_config)

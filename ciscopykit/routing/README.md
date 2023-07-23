@@ -154,4 +154,50 @@ ospf_config = ospf_instance.generate_config()
 print(ospf_config)
 ```
 
-This module provides classes that allow you to configure and generate dynamic routing protocols such as OSPF and RIP on Cisco devices. The example usage above demonstrates how to use the `OSPF` class to configure OSPF with specific options and print the resulting configuration commands. 
+##### `EIGRP`
+
+Class representing the EIGRP (Enhanced Interior Gateway Routing Protocol) routing protocol.
+
+EIGRP is a distance-vector routing protocol that is widely used in Cisco networks. It uses Diffusing Update Algorithm (DUAL) to calculate the shortest path to a destination network.
+
+**Attributes:**
+- `as_number` (int): The EIGRP autonomous system number.
+- `networks` (list): A list of network addresses to be advertised.
+- `active_interfaces` (list, optional): A list of interfaces to enable EIGRP on (default: None).
+- `metric_bandwidth` (int, optional): Bandwidth metric for EIGRP (default: 1000).
+- `metric_delay` (int, optional): Delay metric for EIGRP (default: 1).
+- `metric_reliability` (int, optional): Reliability metric for EIGRP (default: 255).
+- `metric_load` (int, optional): Load metric for EIGRP (default: 1).
+- `metric_mtu` (int, optional): MTU metric for EIGRP (default: 1500).
+
+**Methods:**
+- `configure()`: Configures EIGRP routing protocol on the device.
+- `generate_config()`: Generates the configuration for the EIGRP routing protocol.
+
+**Raises:**
+- `ValueError`: If the AS number is not in the valid range (1 to 65535).
+- `ValueError`: If the provided IP addresses are not valid.
+
+**Usage Example:**
+
+```python
+eigrp_options = {
+    'networks': ['192.168.1.0/24', '10.0.0.0/16'],
+    'active_interfaces': ['GigabitEthernet0/1', 'Serial0/0/0'],
+    'metric_bandwidth': 2000,
+    'metric_delay': 10,
+    'metric_reliability': 255,
+    'metric_load': 1,
+    'metric_mtu': 1500
+}
+
+eigrp_instance = EIGRP(as_number=100, **eigrp_options)
+
+# Generate EIGRP configuration
+eigrp_config = eigrp_instance.generate_config()
+
+# Print the generated configuration
+print(eigrp_config)
+```
+
+This module provides classes that allow you to configure and generate dynamic routing protocols such as OSPF, RIP, and EIGRP on Cisco devices. The example usage above demonstrates how to use the `OSPF` and `EIGRP` classes to configure the respective protocols with specific options and print the resulting configuration commands.
