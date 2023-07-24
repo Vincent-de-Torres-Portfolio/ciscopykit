@@ -1,5 +1,5 @@
 """
-static_routes.py
+static_routing.py
 
 This module provides functions to configure static routes 
 and route redistribution for Cisco devices.

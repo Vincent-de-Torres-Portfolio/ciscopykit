@@ -36,6 +36,7 @@ setup(
             'services=ciscopykit.services.app:main',
             'vlan=ciscopykit.vlan.app:main',
             'lan_security = ciscopykit.lan_security.app:main'
+            'routing=ciscopykit.routing.app:main'
         ],
     },
 )
