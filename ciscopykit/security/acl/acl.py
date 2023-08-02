@@ -136,3 +136,31 @@ class ACL:
             acl_config.append(f"ip access-list extended {self.acl_name}")
         acl_config.extend(self.entries)
         return "\n".join(acl_config)
+
+class ExtendedNumberedACL(ACL):
+    """
+    Class representing an extended numbered Access Control List (ACL).
+
+    This class extends the base ACL class to support extended numbered ACLs.
+
+    Methods (inherited from ACL):
+        add_entry(entry): Add an entry to the ACL.
+        remove_entry(entry): Remove an entry from the ACL.
+        configure(): Generate the configuration for the ACL.
+    """
+
+    def configure(self):
+        """
+        Generate the configuration for the extended numbered ACL.
+
+        Returns:
+            str: The configuration commands for the extended numbered ACL.
+        """
+        acl_config = []
+        if self.acl_number is not None:
+            acl_config.append(f"access-list {self.acl_number} extended")
+        acl_config.extend(self.entries)
+        return "\n".join(acl_config)
+
+
+
