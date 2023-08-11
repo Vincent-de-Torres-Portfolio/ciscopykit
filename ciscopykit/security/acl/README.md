@@ -1,81 +1,68 @@
-# acl.py - Module for Configuring Access Control Lists (ACLs) in CiscoPyKit
+# CiscoPyKit ACL Module
 
-This module provides a class to represent and configure Access Control Lists (ACLs) in CiscoPyKit. The `ACL` class allows users to create standard numbered ACLs and named ACLs and add or remove entries to define traffic filtering rules.
+The **CiscoPyKit ACL Module** provides a flexible and extensible way to create, manage, and configure Access Control Lists (ACLs) in the CiscoPyKit framework.
 
-## Class:
+## Overview
 
-### ACL
+Access Control Lists (ACLs) are an essential part of network security and traffic filtering. The CiscoPyKit ACL Module allows you to easily define ACLs with different types (standard, extended) and identify them by either numbers or names. You can add and remove entries to these ACLs to define traffic filtering rules.
 
-Class representing a standard numbered or named Access Control List (ACL).
+## Features
 
-#### Attributes:
+- Create standard numbered ACLs with a number between 1 and 99.
+- Create extended numbered ACLs with a number between 100 and 199.
+- Create named standard ACLs.
+- Create named extended ACLs.
+- Add and remove entries to define traffic filtering rules.
+- Generate configuration commands based on the defined ACLs.
 
-- `acl_number` (int): The ACL number (for standard numbered ACLs).
-- `acl_name` (str): The ACL name (for named ACLs).
-- `entries` (list): List of ACL entries.
+## Usage Examples
 
-#### Methods:
-
-- `add_entry(entry)`: Add an entry to the ACL.
-- `remove_entry(entry)`: Remove an entry from the ACL.
-- `configure()`: Generate the configuration for the ACL.
-
-#### Raises:
-
-- `ValueError`: If an entry with the same sequence number already exists (for numbered ACLs).
-
-## Usage Example:
+### Creating a Standard Numbered ACL
 
 ```python
-# Import the ACL class from acl.py
-from acl import ACL
+from acl import StandardNumberedACL
 
 # Create a standard numbered ACL with number 10
-acl = ACL(acl_number=10)
+acl = StandardNumberedACL(acl_number=10)
 
 # Add entries to the ACL
 acl.add_entry("10 permit 192.168.1.0 0.0.0.255")
 acl.add_entry("20 deny any")
 
-# Remove an entry from the ACL
-acl.remove_entry("20 deny any")
-
 # Generate the configuration for the ACL
 acl_config = acl.configure()
 print(acl_config)
 ```
 
-Output:
-
-```
-access-list 10 standard
-10 permit 192.168.1.0 0.0.0.255
-```
-
-## Usage Example for Named ACL:
+### Creating a Named Extended ACL
 
 ```python
-# Import the ACL class from acl.py
-from acl import ACL
+from acl import NamedExtendedACL
 
-# Create a named ACL with name "my_acl"
-acl = ACL(acl_name="my_acl")
+# Create a named extended ACL with name "my_acl"
+acl = NamedExtendedACL(acl_name="my_acl")
 
 # Add entries to the ACL
 acl.add_entry("permit ip 192.168.1.0 0.0.0.255 any")
 acl.add_entry("deny ip any any")
 
-# Remove an entry from the ACL
-acl.remove_entry("deny ip any any")
-
 # Generate the configuration for the ACL
 acl_config = acl.configure()
 print(acl_config)
 ```
 
-Output:
+## Installation
 
-```
-ip access-list extended my_acl
-permit ip 192.168.1.0 0.0.0.255 any
-```
+1. Clone the repository or download the `acl.py` module.
+2. Include the `acl.py` module in your project.
+3. Import the necessary classes from `acl` and start creating and managing ACLs.
+
+## Contributions
+
+Contributions to enhance the CiscoPyKit ACL Module are welcome! Feel free to submit pull requests or open issues for bug reports, feature requests, or general discussions.
+
+## License
+
+This module is released under the [MIT License](LICENSE).
+
+---
