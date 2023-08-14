@@ -10,9 +10,6 @@ Classes:
     Layer2EtherChannel: Class representing a Layer 2 EtherChannel configuration.
     Layer3EtherChannel: Class representing a Layer 3 EtherChannel configuration.
 
-Attributes:
-    (None)
-
 Usage:
     To use this module, import the classes and create instances of the Layer2EtherChannel and
     Layer3EtherChannel classes with the required parameters. Then, call the 'configure()' method
@@ -24,7 +21,8 @@ Example:
 
     # Example configuration for Layer 2 EtherChannel
     interfaces = ["GigabitEthernet0/1", "GigabitEthernet0/2"]
-    l2_etherchannel = Layer2EtherChannel(port_channel_number=1, interfaces=interfaces)
+    l2_etherchannel = Layer2EtherChannel(
+        port_channel_number=1, interfaces=interfaces)
     l2_config = l2_etherchannel.configure()
     print(l2_config)
 
@@ -32,13 +30,17 @@ Example:
     interfaces = ["GigabitEthernet0/3", "GigabitEthernet0/4"]
     ip_address = "192.168.1.1"
     subnet_mask = "255.255.255.0"
-    l3_etherchannel = Layer3EtherChannel(port_channel_number=2, interfaces=interfaces, ip_address=ip_address, subnet_mask=subnet_mask)
+    l3_etherchannel = Layer3EtherChannel(
+        port_channel_number=2, interfaces=interfaces, ip_address=ip_address, subnet_mask=subnet_mask)
     l3_config = l3_etherchannel.configure()
     print(l3_config)
     ```
 """
-import ipaddress
+
 import re
+import ipaddress
+
+
 class EtherChannel:
     """
     Base class for configuring EtherChannels.
@@ -76,8 +78,9 @@ class EtherChannel:
         Raises:
             NotImplementedError: Raised when the method is not implemented by the subclass.
         """
-        raise NotImplementedError("Subclasses must implement the 'configure' method.")
-    
+        raise NotImplementedError(
+            "Subclasses must implement the 'configure' method.")
+
 
 class Layer2EtherChannel(EtherChannel):
     """
@@ -104,10 +107,12 @@ class Layer2EtherChannel(EtherChannel):
         super().__init__(port_channel_number)
 
         if not (1 <= port_channel_number <= 4096):
-            raise ValueError("Invalid port channel number. The number must be in the range 1 to 4096.")
+            raise ValueError(
+                "Invalid port channel number. The number must be in the range 1 to 4096.")
 
         if len(interfaces) < 2:
-            raise ValueError("Layer 2 EtherChannel requires at least 2 interfaces to form the bundle.")
+            raise ValueError(
+                "Layer 2 EtherChannel requires at least 2 interfaces to form the bundle.")
 
         self.interfaces = interfaces
 
@@ -140,5 +145,60 @@ class Layer2EtherChannel(EtherChannel):
                 f"switchport mode trunk",
                 f"switchport trunk allowed vlan {self.allowed_vlans}"
             ])
+
+        return "\n".join(config_commands)
+
+
+class Layer3EtherChannel(EtherChannel):
+    """
+    Class representing a Layer 3 EtherChannel configuration.
+
+    Layer 3 EtherChannel is used to bundle multiple physical interfaces
+    into a single logical interface with IP addressing.
+
+    Attributes:
+    port_channel_number (int): The number of the port-channel interface.
+    interfaces (list): List of physical interfaces to be bundled.
+    ip_address (str): IP address for the logical interface.
+    subnet_mask (str): Subnet mask for the IP address.
+
+    Methods:
+    configure(): Configures the Layer 3 EtherChannel.
+
+    Raises:
+    ValueError: If the port_channel_number is not in the valid range (1 to 4096).
+    ValueError: If there are not enough interfaces (minimum 2) to form the EtherChannel.
+    ValueError: If the IP address or subnet mask format is invalid.
+    """
+
+    def __init__(self, port_channel_number, interfaces, ip_address, subnet_mask):
+        super().__init__(port_channel_number)
+
+        if not (1 <= port_channel_number <= 4096):
+            raise ValueError(
+                "Invalid port channel number. The number must be in the range 1 to 4096.")
+
+        if len(interfaces) < 2:
+            raise ValueError(
+                "Layer 3 EtherChannel requires at least 2 interfaces to form the bundle.")
+
+        self.interfaces = interfaces
+        self.ip_address = ipaddress.IPv4Address(ip_address)
+        self.subnet_mask = ipaddress.IPv4Address(subnet_mask)
+
+    def configure(self):
+        """
+        Configure Layer 3 EtherChannel.
+
+        Returns:
+            str: The configuration commands for configuring the Layer 3 EtherChannel.
+        """
+        config_commands = [
+            f"interface range {', '.join(self.interfaces)}",
+            f"channel-group {self.port_channel_number} mode active",
+            f"exit",
+            f"interface port-channel {self.port_channel_number}",
+            f"ip address {self.ip_address} {self.subnet_mask}"
+        ]
 
         return "\n".join(config_commands)
