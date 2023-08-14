@@ -46,7 +46,3 @@ Replace `<port_channel_number>`, `<interfaces>`, `<vlan_list>`, `<ip_address>`, 
 
 This subpackage is distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 ```
-
-Make sure to replace placeholders like `<port_channel_number>`, `<interfaces>`, `<vlan_list>`, `<ip_address>`, and `<subnet_mask>` with actual values and explanations that match your code.
-
-Remember to include information about the installation process, how to use the CLI commands, and any other relevant details. Also, include a section about licensing and provide a link to the actual `LICENSE` file in your package.
