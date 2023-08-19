@@ -1,4 +1,4 @@
-# CiscoPyKit GRE Module
+# `gre` Module
 
 The CiscoPyKit GRE module provides a Python script to configure Generic Routing Encapsulation (GRE) tunnels for Cisco routers. This module allows users to easily generate GRE tunnel configurations by providing the necessary parameters through the command line.
 
