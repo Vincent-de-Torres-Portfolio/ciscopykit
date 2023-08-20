@@ -26,16 +26,6 @@ Usage Example:
 
     print(gre_config)
     ```
-
-Output:
-    ```
-    interface Tunnel1
-    ip address 10.0.0.1 20.0.0.1
-    tunnel source 10.0.0.1
-    tunnel destination 20.0.0.1
-    ip address 192.168.0.1
-    ```
-
 """
 
 import ipaddress
@@ -80,7 +70,7 @@ class GRE:
 
         if tunnel_ip:
             try:
-                self.tunnel_ip = ipaddress.IPv4Address(tunnel_ip)
+                self.tunnel_ip = ipaddress.IPv4Interface(tunnel_ip)
             except ipaddress.AddressValueError:
                 raise ValueError("Invalid IP address format for tunnel_ip.")
         else:
@@ -96,16 +86,14 @@ class GRE:
             str: The configuration commands for the GRE tunnel.
         """
         config = f"""
-        interface Tunnel{self.tunnel_id}
-        ip address {self.tunnel_source} {self.tunnel_destination}
-        tunnel source {self.tunnel_source}
-        tunnel destination {self.tunnel_destination}
-        """
+interface Tunnel{self.tunnel_id}
+tunnel source {self.tunnel_source}
+tunnel destination {self.tunnel_destination}
+"""
         if self.tunnel_ip:
-            config += f"\n ip address {self.tunnel_ip}"
+            config += f"\nip address {(self.tunnel_ip).ip} {(self.tunnel_ip).netmask}"
 
         return config.strip()
-
 
 def main():
     parser = argparse.ArgumentParser(description="Configure a Generic Routing Encapsulation (GRE) tunnel.")
@@ -121,4 +109,13 @@ def main():
     print(gre_config)
 
 if __name__ == "__main__":
-    main()
+    # main()
+    tunnel_id = 1
+    tunnel_source = "10.0.0.1"
+    tunnel_destination = "20.0.0.1"
+    tunnel_ip = "192.168.0.1/23"
+
+    gre_tunnel = GRE(tunnel_id, tunnel_source, tunnel_destination, tunnel_ip)
+    gre_config = gre_tunnel.configure()
+
+    print(gre_config)    
