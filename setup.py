@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='ciscopykit',
-    version='2.3.1',
+    version='2.3.2',
     author='devinci-it',
     author_email='vince.dev@icloud.com',
     description='A network management toolkit for Cisco devices keeping track of devices when using GNS3 / Cisco Packet Tracer',
