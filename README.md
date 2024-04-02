@@ -1,77 +1,116 @@
-# CiscoPyKit - Network Management Toolkit for Cisco Devices
-
 ![logo](assets/img/logo.svg)
 
-CiscoPyKit is a powerful and comprehensive network management toolkit designed specifically for Cisco devices. It simplifies the management and configuration of network devices, interfaces, and services, while also providing advanced features for network security.
+
+# ciscopykit
+
+ciscopykit is a Python package designed to automate the generation of Cisco IOS commands and provide an easy way to track device configurations. It offers functionalities organized into various subpackages, each focusing on a specific aspect of network management. This README aims to provide an overview of the package structure and its functionalities.
 
 ## Features
 
-- Device Management: Add, remove, and modify Cisco devices effortlessly. *
-- Interface Management: Assign and remove IP addresses for network interfaces with ease. *
-- Configuration Management: Retrieve and update device configurations seamlessly. *
--  IP Services Features :
-    - DHCP Service Configuration: Configure DHCP on network devices to efficiently manage IP address assignment.
-    - Port Address Translation (PAT) Configuration: Configure Port Address Translation (PAT) for simplified network address translation.
-    - L3 Switch Configuration: Generate and configure Layer 3 switch settings effortlessly.
-- LAN Security Features:
-  - [Switchport Security](lan_security/README.md#switchport-security-module): Configure security settings for switchports to prevent unauthorized access.
-  - [VLAN Security](lan_security/README.md#vlan-security-module): Manage VLANs and configure VLAN-based security policies to control traffic flow.
-  - [DHCP Snooping](lan_security/README.md#dhcp-snooping-module): Enable and configure DHCP snooping to protect against rogue DHCP servers.
-  - [Dynamic ARP Inspection](lan_security/README.md#dynamic-arp-inspection-module): Validate ARP packets to prevent ARP spoofing attacks.
-  - [STP Security](lan_security/README.md#stp-security-module): Enhance Spanning Tree Protocol (STP) security to safeguard against STP-based attacks.
-  
-For detailed information on each feature, please refer to the README.md files in the corresponding subpackages.
+- **Device Management**: The `device` module facilitates device management tasks such as adding, removing, modifying, and listing Cisco devices.
+- **Interface Configuration**: The `interface` module handles interface management, allowing users to assign and remove IP addresses for network interfaces.
+- **Services Configuration**: The `services` subpackage contains modules for configuring DHCP and PAT services on network devices.
+- **Switch Settings**: The `switch` subpackage provides functions to generate and configure switch settings.
+- **VLAN Configuration**: The `vlan` subpackage offers functionalities to generate and configure VLAN and VTP settings.
+- **LAN Security**: The `lan_security` subpackage includes modules for LAN security features, covering switchport security, VLAN security, DHCP snooping, dynamic ARP inspection, and STP security.
+- **Routing Configuration**: The `routing` subpackage contains modules for configuring static and dynamic routing protocols.
 
-## Package Updates
+## Directory Structure
 
 ```
-ciscopykit
-├── ...
-├── lan_security (NEW)
-│   ├── switchport_security.py
-│   ├── vlan_security.py
-│   ├── dhcp_snooping.py
-│   ├── dynamic_arp_inspection.py
-│   ├── stp_security.py
+ciscopykit/
+├── app.py
+├── device.py
+├── entry_point.py
+├── etherchannel
+│   ├── cli.py
+│   ├── etherchannel.py
+│   ├── __init__.py
 │   └── README.md
-│   
-├── routing (WIP)
-│   ├── static_routes.py 
+├── help
+│   ├── demo.py
+│   ├── device.md
+│   └── help.md
+├── __init__.py
+├── interface.py
+├── ip
+│   ├── __init__.py
+│   ├── README.md
+│   └── vlsm.py
+├── README.md
+├── routing
+│   ├── app.py
 │   ├── dynamic_routing.py
+│   ├── __init__.py
+│   ├── README.md
+│   └── static_routing.py
+├── security
+│   ├── acl
+│   │   ├── acl.py
+│   │   ├── __init__.py
+│   │   └── README.md
+│   ├── __init__.py
+│   └── lan_security
+│       ├── app.py
+│       ├── dhcp_snooping.py
+│       ├── dynamic_arp_inspection.py
+│       ├── __init__.py
+│       ├── README.md
+│       ├── stp_security.py
+│       ├── switchport_security.py
+│       ├── vlan_security.py
+│       └── wiki.md
+├── services
+│   ├── app.py
+│   ├── dhcp_service.py
+│   ├── help.md
+│   ├── __init__.py
+│   ├── pat_service.py
+│   └── wiki.md
+├── switch
+│   ├── app.py
+│   ├── help.md
+│   ├── __init__.py
+│   ├── l2_switch.py
+│   ├── l3_switch.py
+│   ├── switch.py
+│   └── wiki.md
+├── templates
+│   ├── generate_router_config.py
+│   ├── logo.svg
+│   ├── placeholder.txt
 │   └── README.md
-│   
-└── README.md
+├── vlan
+│   ├── app.py
+│   ├── __init__.py
+│   ├── README.md
+│   ├── vlan.py
+│   └── wiki.md
+└── vpn
+    ├── dmvpn
+    │   ├── dmvpn.py
+    │   ├── __init__.py
+    │   └── README.md
+    ├── gre
+    │   ├── gre.py
+    │   ├── __init__.py
+    │   └── README.md
+    └── README.md
 
 ```
 
-The package is organized into various subpackages, each focused on a specific aspect of network management. Within each subpackage, you will find modules and functions tailored to handle specific tasks related to the subpackage's theme.
+## Getting Started
 
-- The `device` module deals with device management, allowing you to add, remove, modify, and list Cisco devices.
-- The `interface` module handles interface management, enabling you to assign and remove IP addresses for network interfaces.
-- The `services` subpackage contains modules for configuring DHCP and PAT services on network devices.
-- The `switch` subpackage provides functions to generate and configure switch settings.
-- The `vlan` subpackage provides functions to generate and configure vlan and vtp settings.
-- The `lan_security` subpackage includes modules for LAN security features like switchport security, VLAN security, DHCP snooping, dynamic ARP inspection, and STP security.
-- The `routing` subpackage (Coming Soon) will contain modules for configuring static and dynamic routing protocols.
-
-For detailed information on the functions and features within each subpackage, please refer to the corresponding README.md file.
-
-## Installation
-
-Use pip to install CiscoPyKit:
+To install ciscopykit, you can use pip:
 
 ```bash
 pip install ciscopykit
 ```
 
-## Usage
+## Contribution
 
-CiscoPyKit provides a user-friendly command-line interface (CLI) that simplifies the configuration and management of Cisco devices. For detailed information on the functions and features within each subpackage, please refer to the corresponding README.md file.
-
-## Contributing
-
-Contributions to CiscoPyKit are welcome! If you encounter any issues, have feature requests, or want to contribute code, please feel free to open an issue or submit a pull request on GitHub.
+Contributions to ciscopykit are welcome! If you have any ideas, enhancements, or bug fixes, feel free to open an issue or submit a pull request on [GitHub](https://github.com/devinci-it/ciscopykit).
 
 ## License
 
-CiscoPyKit is licensed under the [MIT License](LICENSE).
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
